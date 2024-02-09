@@ -1,4 +1,4 @@
-DROP DATABASE TaskTest;
+-- DROP DATABASE TaskTest;
 CREATE DATABASE TaskTest;
 
 USE TaskTest;
