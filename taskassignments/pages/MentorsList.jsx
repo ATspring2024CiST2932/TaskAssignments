@@ -6,12 +6,13 @@ const MentorsList = () => {
   const [mentees, setMentees] = useState([]);
   const [tasks, setTasks] = useState([]);
   const [selectedMentorId, setSelectedMentorId] = useState(null);
+  const [selectedMenteeId, setSelectedMenteeId] = useState(null);
 
   const [isLoadingMentors, setIsLoadingMentors] = useState(false);
   const [isLoadingMentees, setIsLoadingMentees] = useState(false);
   const [isLoadingTasks, setIsLoadingTasks] = useState(false);
 
-  const [error, setError] = useState(null);
+  const [errorMentors, setErrorMentors] = useState(null);
   const [errorMentees, setErrorMentees] = useState(null);
   const [errorTasks, setErrorTasks] = useState(null);
 
@@ -35,49 +36,59 @@ const MentorsList = () => {
       .finally(() => setIsLoadingMentors(false));
   }, []);
 
-  useEffect(() => {
-    if (selectedMentorId) {
-      // Fetch mentees for the selected mentor
-      setIsLoadingMentees(true);
-      fetch(`/api/mentees/mentor/${selectedMentorId}`) // Adjusted endpoint to reflect fetching mentees by mentor
-        .then((res) => res.json())
-        .then((data) => {
-          setMentees(data);
-          // Optionally, trigger tasks fetching here for the first mentee or a specific mentee
-        })
-        .catch((error) => {
-          console.error("Failed to fetch mentees:", error);
-          setErrorMentees(error.toString());
-        })
-        .finally(() => setIsLoadingMentees(false));
-    }
-  }, [selectedMentorId]);
+// Fetch mentees for the selected mentor
+useEffect(() => {
+  if (selectedMentorId) {
+    setIsLoadingMentees(true);
+    fetch(`/api/mentees?mentorId=${selectedMentorId}`) // Use the mentorId as a query parameter
+      .then(res => {
+        if (!res.ok) throw new Error('Failed to fetch mentees');
+        return res.json();
+      })
+      .then(data => {
+        setMentees(data);
+      })
+      .catch(error => {
+        console.error("Failed to fetch mentees:", error);
+        setErrorMentees(error.toString());
+      })
+      .finally(() => setIsLoadingMentees(false));
+  }
+}, [selectedMentorId]); // Re-fetch mentees when selectedMentorId changes
+
   
   useEffect(() => {
-    // Assuming you keep track of a selected mentee in state, fetch tasks when a mentee is selected
-    const selectedMenteeId = mentees[0]?.EmployeeID; // Example: automatically select the first mentee
     if (selectedMenteeId) {
       setIsLoadingTasks(true);
-      fetch(`/api/tasks/mentee/${selectedMenteeId}`) // Assumes endpoint to fetch tasks by mentee
-        .then((res) => res.json())
-        .then(setTasks)
+      fetch(`/api/tasks/mentee/${selectedMenteeId}`)
+        .then((res) => {
+          if (!res.ok) throw new Error('Failed to fetch tasks');
+          return res.json();
+        })
+        .then((data) => {
+          setTasks(data);
+        })
         .catch((error) => {
           console.error("Failed to fetch tasks:", error);
           setErrorTasks(error.toString());
         })
         .finally(() => setIsLoadingTasks(false));
     }
-  }, [mentees]); // Rerun effect when mentees list changes
+  }, [selectedMenteeId]); // Note: Ensure you have a mechanism to set `selectedMenteeId` when a mentee is selected
   
-
   const handleMentorClick = (mentorId) => {
     setSelectedMentorId(mentorId);
   };
+  const handleMenteeClick = menteeId => {
+    setSelectedMenteeId(menteeId);
+  };
+  
+  
 
   return (
     <div>
       <h2>Mentors</h2>
-      {isLoadingMentors ? <div>Loading mentors...</div> : error ? <div>Error: {error}</div> : (
+      {isLoadingMentors ? <div>Loading mentors...</div> : errorMentors ? <div>Error: {errorMentors}</div> : (
         <ul>
           {mentors.map(mentor => (
             <li 
@@ -94,23 +105,34 @@ const MentorsList = () => {
       {isLoadingMentees ? <div>Loading mentees...</div> : errorMentees ? <div>Error: {errorMentees}</div> : (
         <ul>
           {mentees.map(mentee => (
-            <li key={mentee.id} style={{ backgroundColor: mentee.mentorId === selectedMentorId ? 'yellow' : '' }}>
+            <li key={mentee.EmployeeID}
+              onClick={() => handleMenteeClick(mentee.EmployeeID)}
+              style={{ backgroundColor: mentee.EmployeeID === selectedMenteeId ? 'pink' : '' }}>
               {mentee.Name}
             </li>
           ))}
         </ul>
       )}
 
+
       <h2>Tasks</h2>
-      {isLoadingTasks ? <div>Loading tasks...</div> : errorTasks ? <div>Error: {errorTasks}</div> : (
-        <ul>
-          {tasks.map(task => (
-            <li key={task.id} style={{ backgroundColor: mentees.some(mentee => mentee.id === task.menteeId && mentee.mentorId === selectedMentorId) ? 'yellow' : '' }}>
-              {task.description}
-            </li>
-          ))}
-        </ul>
+      {isLoadingTasks ? (
+        <div>Loading tasks...</div>
+      ) : errorTasks ? (
+  <div>Error: {errorTasks}</div>
+      ) : (
+  <ul>
+    {tasks.map((task) => (
+      <li
+        key={task.TaskID}
+        style={{ backgroundColor: task.EmployeeID === selectedMenteeId ? 'yellow' : '' }}
+      >
+        {task.description}
+      </li>
+    ))}
+  </ul>
       )}
+
     </div>
   );
 };
