@@ -1,9 +1,12 @@
 // pages/api/mentors.js
-import db from 'Task_Assignments/taskassignments/utils/db';
+
+
+import pool from '../../utils/db';
+
 export default async function handler(req, res) {
   if (req.method === 'GET') {
     try {
-      const [rows] = await db.query(`
+      const [rows] = await pool.query(`
         SELECT DISTINCT e.EmployeeID, e.Name
         FROM Employees e
         LEFT JOIN MentorMenteeAssignments mma ON e.EmployeeID = mma.MentorID

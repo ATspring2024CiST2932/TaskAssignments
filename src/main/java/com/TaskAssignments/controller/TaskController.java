@@ -16,12 +16,12 @@ public class TaskController {
     @Autowired
     private TaskRepository taskRepository;
 
-    // Endpoint to get tasks for a mentee
-    @GetMapping("/mentee/{menteeId}")
-    public ResponseEntity<List<Task>> getTasksForMentee(@PathVariable Long menteeId) {
-        List<Task> tasks = taskRepository.findByEmployeeEmployeeId(menteeId);
-        return ResponseEntity.ok(tasks);
+        // Generalized endpoint to get tasks for any employee (mentor or mentee)
+        @GetMapping("/employee/{employeeId}")
+        public ResponseEntity<List<Task>> getTasksForEmployee(@PathVariable Long employeeId) {
+            List<Task> tasks = taskRepository.findByEmployeeEmployeeId(employeeId);
+            return ResponseEntity.ok(tasks);
+        }
+    
+        // Add other endpoints as needed
     }
-
-    // Add other endpoints as needed...
-}

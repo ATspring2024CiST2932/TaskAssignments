@@ -48,29 +48,29 @@ class Mentee {
     public void setMentorId(Long mentorId) { this.mentorId = mentorId; }
 }
 
-// Task Entity
-@Entity
-@Table(name = "tasks")
-class Task {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+// // Task Entity
+// @Entity
+// @Table(name = "tasks")
+// class Task {
+//     @Id
+//     @GeneratedValue(strategy = GenerationType.IDENTITY)
+//     private Long id;
 
-    private String description;
+//     private String description;
 
-    @Column(name = "mentee_id")
-    private Long menteeId;
+//     @Column(name = "mentee_id")
+//     private Long menteeId;
 
-    // Getters and setters for Task
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+//     // Getters and setters for Task
+//     public Long getId() { return id; }
+//     public void setId(Long id) { this.id = id; }
     
-    public String getDescription() { return description; }
-    public void setDescription(String description) { this.description = description; }
+//     public String getDescription() { return description; }
+//     public void setDescription(String description) { this.description = description; }
     
-    public Long getMenteeId() { return menteeId; }
-    public void setMenteeId(Long menteeId) { this.menteeId = menteeId; }
-}
+//     public Long getMenteeId() { return menteeId; }
+//     public void setMenteeId(Long menteeId) { this.menteeId = menteeId; }
+// }
 
 // Mentor Repository
 @Repository
