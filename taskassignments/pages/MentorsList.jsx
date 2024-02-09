@@ -56,26 +56,25 @@ useEffect(() => {
   }
 }, [selectedMentorId]); // Re-fetch mentees when selectedMentorId changes
 
-  
-  useEffect(() => {
-    if (selectedMenteeId) {
-      setIsLoadingTasks(true);
-      fetch(`/api/tasks/mentee/${selectedMenteeId}`)
-        .then((res) => {
-          if (!res.ok) throw new Error('Failed to fetch tasks');
-          return res.json();
-        })
-        .then((data) => {
-          setTasks(data);
-        })
-        .catch((error) => {
-          console.error("Failed to fetch tasks:", error);
-          setErrorTasks(error.toString());
-        })
-        .finally(() => setIsLoadingTasks(false));
-    }
-  }, [selectedMenteeId]); // Note: Ensure you have a mechanism to set `selectedMenteeId` when a mentee is selected
-  
+useEffect(() => {
+  if (selectedMentorId) {
+    setIsLoadingTasks(true);
+    fetch(`/api/tasks?mentorId=${selectedMentorId}`)
+      .then((res) => {
+        if (!res.ok) throw new Error('Failed to fetch tasks');
+        return res.json();
+      })
+      .then((data) => {
+        setTasks(data);
+      })
+      .catch((error) => {
+        console.error("Failed to fetch tasks:", error);
+        setErrorTasks(error.toString());
+      })
+      .finally(() => setIsLoadingTasks(false));
+  }
+}, [selectedMentorId]); // Fetch tasks when a mentor is selected
+ 
   const handleMentorClick = (mentorId) => {
     setSelectedMentorId(mentorId);
   };
@@ -94,7 +93,7 @@ useEffect(() => {
             <li 
               key={mentor.EmployeeID} 
               onClick={() => handleMentorClick(mentor.EmployeeID)} 
-              style={{ backgroundColor: selectedMentorId === mentor.EmployeeID ? 'yellow' : '' }}>
+              style={{ backgroundColor: selectedMentorId === mentor.EmployeeID ? '#BDE0FE' : '' }}>
               {mentor.Name}
             </li>
           ))}
@@ -107,7 +106,7 @@ useEffect(() => {
           {mentees.map(mentee => (
             <li key={mentee.EmployeeID}
               onClick={() => handleMenteeClick(mentee.EmployeeID)}
-              style={{ backgroundColor: mentee.EmployeeID === selectedMenteeId ? 'pink' : '' }}>
+              style={{ backgroundColor: mentee.EmployeeID === selectedMenteeId ? '#FED8B1' : '' }}>
               {mentee.Name}
             </li>
           ))}
@@ -125,9 +124,9 @@ useEffect(() => {
     {tasks.map((task) => (
       <li
         key={task.TaskID}
-        style={{ backgroundColor: task.EmployeeID === selectedMenteeId ? 'yellow' : '' }}
+        style={{ backgroundColor: task.EmployeeID === selectedMenteeId ? '#FFE5B4' : '' }}
       >
-        {task.description}
+        Task<strong>{task.TaskNumber}</strong>: {task.Description}
       </li>
     ))}
   </ul>
