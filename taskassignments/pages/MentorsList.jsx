@@ -18,13 +18,16 @@ const MentorsList = () => {
   useEffect(() => {
     setIsLoadingMentors(true);
     fetch('/api/mentors')
-      .then((res) => {
+      .then(res => {
         if (!res.ok) {
           throw new Error('Network response was not ok');
         }
         return res.json();
       })
-      .then(setMentors)
+      .then(data => {
+        console.log(data); 
+        setMentors(data);
+      })
       .catch((error) => {
         console.error("Failed to fetch mentors:", error);
         setError(error.toString());
@@ -66,8 +69,11 @@ const MentorsList = () => {
       {isLoadingMentors ? <div>Loading mentors...</div> : error ? <div>Error: {error}</div> : (
         <ul>
           {mentors.map(mentor => (
-            <li key={mentor.id} onClick={() => handleMentorClick(mentor.id)} style={{ backgroundColor: selectedMentorId === mentor.id ? 'yellow' : '' }}>
-              {mentor.name}
+            <li 
+              key={mentor.EmployeeID} 
+              onClick={() => handleMentorClick(mentor.EmployeeID)} 
+              style={{ backgroundColor: selectedMentorId === mentor.EmployeeID ? 'yellow' : '' }}>
+              {mentor.Name}
             </li>
           ))}
         </ul>
@@ -78,7 +84,7 @@ const MentorsList = () => {
         <ul>
           {mentees.map(mentee => (
             <li key={mentee.id} style={{ backgroundColor: mentee.mentorId === selectedMentorId ? 'yellow' : '' }}>
-              {mentee.name}
+              {mentee.Name}
             </li>
           ))}
         </ul>
