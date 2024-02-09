@@ -37,18 +37,28 @@ const MentorsList = () => {
 
   useEffect(() => {
     if (selectedMentorId) {
+      // Fetch mentees for the selected mentor
       setIsLoadingMentees(true);
-      fetch(`/api/mentees/${selectedMentorId}`)
+      fetch(`/api/mentees/mentor/${selectedMentorId}`) // Adjusted endpoint to reflect fetching mentees by mentor
         .then((res) => res.json())
-        .then(setMentees)
+        .then((data) => {
+          setMentees(data);
+          // Optionally, trigger tasks fetching here for the first mentee or a specific mentee
+        })
         .catch((error) => {
           console.error("Failed to fetch mentees:", error);
           setErrorMentees(error.toString());
         })
         .finally(() => setIsLoadingMentees(false));
-
+    }
+  }, [selectedMentorId]);
+  
+  useEffect(() => {
+    // Assuming you keep track of a selected mentee in state, fetch tasks when a mentee is selected
+    const selectedMenteeId = mentees[0]?.EmployeeID; // Example: automatically select the first mentee
+    if (selectedMenteeId) {
       setIsLoadingTasks(true);
-      fetch(`/api/tasks/${selectedMentorId}`)
+      fetch(`/api/tasks/mentee/${selectedMenteeId}`) // Assumes endpoint to fetch tasks by mentee
         .then((res) => res.json())
         .then(setTasks)
         .catch((error) => {
@@ -57,7 +67,8 @@ const MentorsList = () => {
         })
         .finally(() => setIsLoadingTasks(false));
     }
-  }, [selectedMentorId]);
+  }, [mentees]); // Rerun effect when mentees list changes
+  
 
   const handleMentorClick = (mentorId) => {
     setSelectedMentorId(mentorId);
