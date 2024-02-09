@@ -126,7 +126,7 @@ useEffect(() => {
         key={task.TaskID}
         style={{ backgroundColor: task.EmployeeID === selectedMenteeId ? '#FFE5B4' : '' }}
       >
-        Task<strong>{task.TaskNumber}</strong>: {task.Description}
+        {task.TaskType} - Task<strong>{task.TaskNumber}</strong>: {task.Description}
       </li>
     ))}
   </ul>

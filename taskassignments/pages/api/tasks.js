@@ -8,7 +8,7 @@ export default async function handler(req, res) {
     try {
       // Adjust the query to select tasks for the mentees of the specific mentor
       const [rows] = await pool.query(`
-        SELECT t.TaskID, t.TaskNumber, t.Description, t.DueDate, t.EmployeeID
+        SELECT t.TaskID, t.TaskNumber, t.Description, t.DueDate, t.TaskType, t.EmployeeID
         FROM Tasks t
         INNER JOIN MentorMenteeAssignments mma ON t.EmployeeID = mma.MenteeID
         INNER JOIN Employees e ON mma.MenteeID = e.EmployeeID
