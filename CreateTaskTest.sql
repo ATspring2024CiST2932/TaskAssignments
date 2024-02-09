@@ -92,23 +92,23 @@ INSERT INTO `TaskTest`.`Employees` (`Name`, `EmploymentType`) VALUES ('Clearly F
 INSERT INTO `TaskTest`.`Employees` (`Name`, `EmploymentType`) VALUES ('Avery Label', 'Intern');
 
 INSERT INTO `TaskTest`.`Tasks` (`EmployeeID`, `TaskNumber`, `Description`, 'TaskType') VALUES (5, '948', 'Fill out expense reports', 'Service');
-INSERT INTO `TaskTest`.`Tasks` (`EmployeeID`, `TaskNumber`, `Description`, 'TaskType') VALUES (6, '523', 'Schedule meetings', 'Junit);
+INSERT INTO `TaskTest`.`Tasks` (`EmployeeID`, `TaskNumber`, `Description`, 'TaskType') VALUES (6, '523', 'Schedule meetings', 'Junit');
 INSERT INTO `TaskTest`.`Tasks` (`EmployeeID`, `TaskNumber`, `Description`, 'TaskType') VALUES (8, '724', 'Deal with email overload', 'Cypress');
 INSERT INTO `TaskTest`.`Tasks` (`EmployeeID`, `TaskNumber`, `Description`, 'TaskType') VALUES (7, '421', 'Data entry', 'UI');
 INSERT INTO `TaskTest`.`Tasks` (`EmployeeID`, `TaskNumber`, `Description`, 'TaskType') VALUES (7, '623', 'Clean up digital files', 'Cypress');
 INSERT INTO `TaskTest`.`Tasks` (`EmployeeID`, `TaskNumber`, `Description`, 'TaskType') VALUES (13, '121', 'Attend unnecessary meetings', 'UI');
 INSERT INTO `TaskTest`.`Tasks` (`EmployeeID`, `TaskNumber`, `Description`, 'TaskType') VALUES (12, '842', 'Troubleshooting tech issues', 'Cypress');
 INSERT INTO `TaskTest`.`Tasks` (`EmployeeID`, `TaskNumber`, `Description`, 'TaskType') VALUES (10, '314', 'Create reports', 'UI');
-INSERT INTO `TaskTest`.`Tasks` (`EmployeeID`, `TaskNumber`, `Description`, 'TaskType') VALUES (9, '153', 'Chase people for responses', 'Junit);
+INSERT INTO `TaskTest`.`Tasks` (`EmployeeID`, `TaskNumber`, `Description`, 'TaskType') VALUES (9, '153', 'Chase people for responses', 'Junit');
 INSERT INTO `TaskTest`.`Tasks` (`EmployeeID`, `TaskNumber`, `Description`, 'TaskType') VALUES (11, '916', 'Manual reconciliation of accounts', 'Service');
-INSERT INTO `TaskTest`.`Tasks` (`EmployeeID`, `TaskNumber`, `Description`, 'TaskType') VALUES (12, '235', 'Profread documents', 'Junit);
+INSERT INTO `TaskTest`.`Tasks` (`EmployeeID`, `TaskNumber`, `Description`, 'TaskType') VALUES (12, '235', 'Profread documents', 'Junit');
 INSERT INTO `TaskTest`.`Tasks` (`EmployeeID`, `TaskNumber`, `Description`, 'TaskType') VALUES (13, '613', 'File paperwork', 'Cypress');
 INSERT INTO `TaskTest`.`Tasks` (`EmployeeID`, `TaskNumber`, `Description`, 'TaskType') VALUES (5, '464', 'Update software', 'UI');
-INSERT INTO `TaskTest`.`Tasks` (`EmployeeID`, `TaskNumber`, `Description`, 'TaskType') VALUES (9, '531', 'Clean workspaces', 'Junit);
+INSERT INTO `TaskTest`.`Tasks` (`EmployeeID`, `TaskNumber`, `Description`, 'TaskType') VALUES (9, '531', 'Clean workspaces', 'Junit');
 INSERT INTO `TaskTest`.`Tasks` (`EmployeeID`, `TaskNumber`, `Description`, 'TaskType') VALUES (6, '464', 'Take inventory', 'Cypress');
 INSERT INTO `TaskTest`.`Tasks` (`EmployeeID`, `TaskNumber`, `Description`, 'TaskType') VALUES (5, '693', 'Train on compliance', 'Service');
-INSERT INTO `TaskTest`.`Tasks` (`EmployeeID`, `TaskNumber`, `Description`, 'TaskType') VALUES (12, '338', 'Manage subscriptions and memberships');
-INSERT INTO `TaskTest`.`Tasks` (`EmployeeID`, `TaskNumber`, `Description`, 'TaskType') VALUES (9, '814', 'Organize retirement party', 'Junit);
+INSERT INTO `TaskTest`.`Tasks` (`EmployeeID`, `TaskNumber`, `Description`, 'TaskType') VALUES (12, '338', 'Manage subscriptions and memberships', 'Cypress');
+INSERT INTO `TaskTest`.`Tasks` (`EmployeeID`, `TaskNumber`, `Description`, 'TaskType') VALUES (9, '814', 'Organize retirement party', 'Junit');
 INSERT INTO `TaskTest`.`Tasks` (`EmployeeID`, `TaskNumber`, `Description`, 'TaskType') VALUES (10, '763', 'Deal with spam calls and emails', 'Service');
 INSERT INTO `TaskTest`.`Tasks` (`EmployeeID`, `TaskNumber`, `Description`, 'TaskType') VALUES (11, '918', 'Wait on hold for copier tech support', 'Service');
 
