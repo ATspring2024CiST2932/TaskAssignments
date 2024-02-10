@@ -129,6 +129,20 @@ useEffect(() => {
         Task<strong>{task.TaskNumber}</strong>: {task.TaskType} - {task.Description}
       </li>
     ))}
+    {tasks.map((task) => (
+      <li
+        key={task.TaskID}
+        style={{
+          backgroundColor: task.EmployeeID === selectedMenteeId
+            ? '#FFE5B4'
+            : task.EmployeeID === selectedMentorId
+            ? '#BDE0FE'
+            : ''
+        }}
+      >
+        Task<strong>{task.TaskNumber}</strong>: {task.TaskType} - {task.Description}
+      </li>
+    ))}
   </ul>
       )}
 

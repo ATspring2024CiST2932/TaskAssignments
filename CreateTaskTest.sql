@@ -4,7 +4,7 @@ CREATE DATABASE TaskTest;
 USE TaskTest;
 
 
-CREATE TABLE Employees (
+CREATE TABLE newhireinfo (
     EmployeeID INT PRIMARY KEY AUTO_INCREMENT,
     Name VARCHAR(255),
     EmploymentType ENUM('Full Time', 'Contractor', 'Apprentice', 'Intern') NOT NULL,
@@ -12,7 +12,7 @@ CREATE TABLE Employees (
     CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE MentorMenteeAssignments (
+CREATE TABLE mentorassignments (
     AssignmentID INT PRIMARY KEY AUTO_INCREMENT,
     MentorID INT NOT NULL,
     MenteeID INT NOT NULL,
@@ -22,12 +22,11 @@ CREATE TABLE MentorMenteeAssignments (
     CONSTRAINT chk_Mentor_Mentee CHECK (MentorID != MenteeID)
 );
 
-CREATE TABLE Tasks (
+CREATE TABLE peercodingtasks (
     TaskID INT PRIMARY KEY AUTO_INCREMENT,
-    EmployeeID INT,
+	TaskURL VARCHAR(100),
     TaskNumber VARCHAR(15),
-    TaskURL VARCHAR(100),
-    Description TEXT,
+	EmployeeID INT,
     DueDate DATE,
     TaskType ENUM('UI', 'Cypress', 'Junit', 'Service') NOT NULL,
     -- Any other task-related fields

@@ -10,8 +10,8 @@ export default async function handler(req, res) {
       // Fetching mentees for a specific mentor
       sql = `
         SELECT e.EmployeeID, e.Name
-        FROM Employees e
-        JOIN MentorMenteeAssignments mma ON e.EmployeeID = mma.MenteeID
+        FROM newhireinfo e
+        JOIN mentorassignments mma ON e.EmployeeID = mma.MenteeID
         WHERE mma.MentorID = ?;
       `;
       params = [mentorId];
@@ -19,8 +19,8 @@ export default async function handler(req, res) {
       // Fetching all mentees (or based on a different condition)
       sql = `
         SELECT e.EmployeeID, e.Name
-        FROM Employees e
-        WHERE e.EmploymentType <> 'Full Time';
+        FROM newhireinfo e
+        WHERE e.Mentor = 0;
       `;
       params = [];
     }

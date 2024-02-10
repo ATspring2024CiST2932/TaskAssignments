@@ -6,7 +6,7 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "Employees")
+@Table(name = "newhireinfo")
 public class Employee {
 
     @Id

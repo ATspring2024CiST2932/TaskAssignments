@@ -50,7 +50,7 @@ class Mentee {
 
 // // Task Entity
 // @Entity
-// @Table(name = "tasks")
+// @Table(name = "peercodingtasks")
 // class Task {
 //     @Id
 //     @GeneratedValue(strategy = GenerationType.IDENTITY)

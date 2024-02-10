@@ -6,18 +6,17 @@ export default async function handler(req, res) {
 
   if (req.method === 'GET' && mentorId) {
     try {
-      // Adjust the query to select tasks for the mentees of the specific mentor
+      // Adjust the query to select tasks for the mentor and their mentees
       const [rows] = await pool.query(`
-        SELECT t.TaskID, t.TaskNumber, t.Description, t.DueDate, t.TaskType, t.EmployeeID
-        FROM Tasks t
-        INNER JOIN MentorMenteeAssignments mma ON t.EmployeeID = mma.MenteeID
-        INNER JOIN Employees e ON mma.MenteeID = e.EmployeeID
-        WHERE mma.MentorID = ? AND e.EmploymentType <> 'Full Time';
+        SELECT t.task_id, t.task_url, t.task_number, t.task_type, t.EmployeeID
+        FROM peercodingtasks t
+        INNER JOIN mentorassignments mma ON t.EmployeeID IN (mma.MentorID, mma.MenteeID)
+        WHERE mma.MentorID = ?;
       `, [mentorId]); // Pass mentorId as a parameter to the query to prevent SQL injection
 
       res.status(200).json(rows);
     } catch (error) {
-      console.error('Failed to fetch tasks for mentor:', error);
+      console.error('Failed to fetch tasks for mentor and mentees:', error);
       res.status(500).json({ error: 'Failed to load data' });
     }
   } else {
