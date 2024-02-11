@@ -14,6 +14,7 @@ const MentorsList = () => {
   // States for loading and error handling
   const [isLoading, setIsLoading] = useState(true); 
   const [error, setError] = useState(null);
+  const [draggingId, setDraggingId] = useState(null);
 
   const [isLoadingUnassignedMentees, setIsLoadingUnassignedMentees] = useState(false);
   const [errorUnassignedMentees, setErrorUnassignedMentees] = useState(null);
@@ -97,27 +98,31 @@ const MentorsList = () => {
       return;
     }
   
-    // Here, you'd use logic based on your application's state or identifiers
-    // For example, if you know the droppable area's ID for mentors and mentees
-    let isMenteeBeingAssigned = false; // Default to false
+    // Assuming the draggableId and droppableId now represent names directly,
+    // or you have a way to map these IDs back to names.
+    let isMenteeBeingAssigned = false;
   
-    // Example condition to determine if a mentee is being assigned to a mentor
-    // This assumes you have a way in your UI to determine this based on source or destination identifiers
+    // Check if the drag operation indicates a mentee assignment to a mentor
     if (source.droppableId === "unassignedMenteesList" && destination.droppableId === "mentorsList") {
       isMenteeBeingAssigned = true;
-    }
+  }
   
-    if (isMenteeBeingAssigned) {
-      const menteeId = source.draggableId; // Assuming draggableId directly corresponds to EmployeeID for simplicity
-      const mentorId = destination.droppableId; // Adjust based on your actual droppableId setup for mentors
-  
+  if (isMenteeBeingAssigned) {
+    // The draggableId from the source should represent the mentee's name
+    // The droppableId from the destination should represent the mentor's section,
+    // but you'll need the mentor's name, which should be determined differently,
+    // possibly from the destination context or stored state.
+    const menteeName = source.draggableId;
+    // Example to obtain the mentor's name. Adjust according to how you can obtain this name in your application.
+    const mentorName = destination.droppableId; // This is a placeholder. You may need a different approach.
+
       // Proceed to use menteeId and mentorId for backend update
       fetch('/api/assign-mentee', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ menteeId, mentorId }),
+        body: JSON.stringify({ menteeName, mentorName }),
       })
       .then(response => response.json())
       .then(data => console.log('Assignment successful', data))
@@ -136,14 +141,23 @@ const MentorsList = () => {
         {(provided) => (
           <div {...provided.droppableProps} ref={provided.innerRef}>
             {mentors.map((mentor, index) => (
-              <Draggable key={mentor.EmployeeID} draggableId={mentor.EmployeeID.toString()} index={index}>
+              <Draggable
+                key={mentor.EmployeeID}
+                draggableId={mentor.EmployeeID.toString()}
+                index={index}
+                onDragStart={() => setDraggingId(mentor.EmployeeID)}
+                onDragEnd={() => setDraggingId(null)}
+              >
                 {(provided) => (
                   <div
                     ref={provided.innerRef}
                     {...provided.draggableProps}
                     {...provided.dragHandleProps}
                     onClick={() => handleMentorClick(mentor.EmployeeID)}
-                    style={{ backgroundColor: selectedMentorId === mentor.EmployeeID ? '#BDE0FE' : '' }}
+                    style={{
+                      backgroundColor: selectedMentorId === mentor.EmployeeID ? '#BDE0FE' : '',
+                      color: draggingId === mentor.EmployeeID ? 'red' : 'black',
+                    }}
                   >
                     {mentor.Name}
                   </div>
@@ -155,7 +169,7 @@ const MentorsList = () => {
         )}
       </Droppable>
 
-      {/* Unassigned Mentees List - Draggable to be dropped on a mentor */}
+      {/* Unassigned Mentees List - Draggable to be dropped on a mentor 
       <Droppable droppableId="unassignedMentees">
         {(provided) => (
           <div ref={provided.innerRef} {...provided.droppableProps}>
@@ -175,7 +189,7 @@ const MentorsList = () => {
           </div>
         )}
       </Droppable>
-    
+       */}             
       {/* Render Mentees list */}
       <div>
         <h2>Mentees</h2>

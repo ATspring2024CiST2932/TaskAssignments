@@ -1,11 +1,14 @@
 // FE_TaskAssignments/pages/api/assign-mentee.js
-import pool from '../../../utils/db'; // Adjust the path as needed to match your project structure
+import pool from '../../utils/db'; 
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
-    // Ensure this endpoint only responds to POST requests
-    res.setHeader('Allow', ['POST']);
-    return res.status(405).end(`Method ${req.method} Not Allowed`);
+    // Handle POST request
+    res.status(200).json({ message: 'Post request received' });
+  } else {
+    // Respond with 405 Method Not Allowed if the method is not supported
+    res.setHeader('Allow', ['POST']); // Indicates the allowed HTTP method
+    res.status(405).end(`Method ${req.method} Not Allowed`);
   }
 
   const { mentorName, menteeName } = req.body;
