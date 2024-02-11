@@ -9,7 +9,7 @@ export default async function handler(req, res) {
       const [rows] = await pool.query(`
         SELECT DISTINCT e.EmployeeID, e.Name
         FROM newhireinfo e
-        LEFT JOIN mentorassignments mma ON e.EmployeeID = mma.MentorID
+        LEFT JOIN temp_mentorassignments mma ON e.EmployeeID = mma.MentorID
         WHERE e.Mentor = 1 OR mma.MentorID IS NOT NULL;
       `);
       res.status(200).json(rows);

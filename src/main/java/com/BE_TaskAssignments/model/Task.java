@@ -7,7 +7,7 @@ import javax.persistence.*;
 
 
 @Entity
-@Table(name = "peercodingtasks")
+@Table(name = "temp_peercodingtasks")
 public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
