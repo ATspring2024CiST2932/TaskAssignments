@@ -1,6 +1,6 @@
 // Task_Assignments/src/main/java/com/TaskAssignments/model/Employee.java
 // Employee.java
-package com.TaskAssignments.model;
+package com.BE_TaskAssignments.model;
 
 import javax.persistence.*;
 import java.util.List;

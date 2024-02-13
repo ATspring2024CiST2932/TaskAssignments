@@ -1,5 +1,5 @@
 // src/main/java/com/TaskAssignments/app/App.java
-package com.TaskAssignments.app;
+package com.BE_TaskAssignments.app;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

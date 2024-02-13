@@ -4,5 +4,6 @@
     "github.copilot.advanced": {
 
     },
-    "github.copilot.chat.localeOverride": "en"
+    "github.copilot.chat.localeOverride": "en",
+    "java.debug.settings.onBuildFailureProceed": true
 }

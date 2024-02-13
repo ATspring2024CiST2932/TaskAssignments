@@ -1,7 +1,7 @@
 // Task_Assignments/src/main/java/com/TaskAssignments/repository/TaskRepository.java
-package com.TaskAssignments.repository;
+package com.BE_TaskAssignments.repository;
 
-import com.TaskAssignments.model.Task;
+import com.BE_TaskAssignments.model.Task;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import java.util.List;

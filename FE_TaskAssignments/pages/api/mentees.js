@@ -11,7 +11,7 @@ export default async function handler(req, res) {
       sql = `
         SELECT e.EmployeeID, e.Name
         FROM newhireinfo e
-        JOIN temp_mentorassignments mma ON e.EmployeeID = mma.MenteeID
+        JOIN mentorassignments mma ON e.EmployeeID = mma.MenteeID
         WHERE mma.MentorID = ?;
       `;
       params = [mentorId];

@@ -23,12 +23,12 @@ DROP TABLE IF EXISTS `mentorassignments`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `mentorassignments` (
-  `Mentor` varchar(100) NOT NULL,
-  `Mentee` varchar(100) NOT NULL,
-  PRIMARY KEY (`Mentor`,`Mentee`),
-  KEY `fk_mentee` (`Mentee`),
-  CONSTRAINT `fk_mentee` FOREIGN KEY (`Mentee`) REFERENCES `newhireinfo` (`Name`),
-  CONSTRAINT `fk_mentor` FOREIGN KEY (`Mentor`) REFERENCES `newhireinfo` (`Name`)
+  `mentorID` int NOT NULL,
+  `menteeID` int NOT NULL,
+  PRIMARY KEY (`mentorID`,`menteeID`),
+  KEY `fk_mentee` (`menteeID`),
+  CONSTRAINT `fk_mentee` FOREIGN KEY (`menteeID`) REFERENCES `newhireinfo` (`EmployeeID`),
+  CONSTRAINT `fk_mentor` FOREIGN KEY (`mentorID`) REFERENCES `newhireinfo` (`EmployeeID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -38,7 +38,7 @@ CREATE TABLE `mentorassignments` (
 
 LOCK TABLES `mentorassignments` WRITE;
 /*!40000 ALTER TABLE `mentorassignments` DISABLE KEYS */;
-INSERT INTO `mentorassignments` VALUES ('John Mentor','Alice Mentee'),('John Mentor','Charlie Mentee'),('Bob Mentor','Daniel Mentee'),('John Mentor','David Mentee'),('Bob Mentor','Emily Mentee'),('Bob Mentor','Frank Mentee'),('Eve Mentor','Grace Mentee'),('Eve Mentor','Hannah Mentee'),('Eve Mentor','Isaac Mentee'),('Grace Mentor','Jacob Mentee'),('Grace Mentor','Lily Mentee'),('Grace Mentor','Olivia Mentee');
+INSERT INTO `mentorassignments` VALUES (3,4),(1,5),(1,6),(1,7),(2,8),(2,9),(2,10),(3,12),(3,13),(4,14),(4,15),(4,16);
 /*!40000 ALTER TABLE `mentorassignments` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -130,3 +130,14 @@ LOCK TABLES `users` WRITE;
 INSERT INTO `users` VALUES (1,'john_mentor','hashed_password','john.doe@example.com','2024-02-02 19:09:57');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2024-02-13 13:07:08

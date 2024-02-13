@@ -1,10 +1,10 @@
 // In src/main/java/com/TaskAssignments/service/AssignmentService.java
-package com.TaskAssignments.service;
+package com.BE_TaskAssignments.service;
 
-import com.TaskAssignments.model.Employee;
-import com.TaskAssignments.model.Task;
-import com.TaskAssignments.repository.EmployeeRepository;
-import com.TaskAssignments.repository.TaskRepository;
+import com.BE_TaskAssignments.model.Employee;
+import com.BE_TaskAssignments.model.Task;
+import com.BE_TaskAssignments.repository.EmployeeRepository;
+import com.BE_TaskAssignments.repository.TaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

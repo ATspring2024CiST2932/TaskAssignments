@@ -1,5 +1,5 @@
 // In src/main/java/com/TaskAssignments/model/Models.java
-package com.TaskAssignments.model;
+package com.BE_TaskAssignments.model;
 
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;

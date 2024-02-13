@@ -1,8 +1,8 @@
 // Task_Assignments/src/main/java/com/TaskAssignments/controller/TaskController.java
-package com.TaskAssignments.controller;
+package com.BE_TaskAssignments.controller;
 
-import com.TaskAssignments.model.Task;
-import com.TaskAssignments.repository.TaskRepository;
+import com.BE_TaskAssignments.model.Task;
+import com.BE_TaskAssignments.repository.TaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

@@ -1,8 +1,8 @@
 //  Task_Assignments/src/main/java/com/TaskAssignments/model/Task.java
-package com.TaskAssignments.model;
+package com.BE_TaskAssignments.model;
 
 import java.util.Date;
-import com.TaskAssignments.model.Task;
+import com.BE_TaskAssignments.model.Task;
 import javax.persistence.*;
 
 
