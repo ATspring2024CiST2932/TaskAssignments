@@ -10,7 +10,7 @@ const MentorsList = () => {
   // States for tracking selected mentor or mentee
   const [selectedMentorId, setSelectedMentorId] = useState(null);
   const [selectedMenteeId, setSelectedMenteeId] = useState(null); // Declaration for tracking selected mentee ID
-  const [unassignedMentees, setUnassignedMentees] = useState([]);
+  const [unassignedMentees, setUnassignedMentees] = useState([null]);
   // States for loading and error handling
   const [isLoading, setIsLoading] = useState(true); 
   const [error, setError] = useState(null);
@@ -22,21 +22,23 @@ const MentorsList = () => {
   // Fetch mentors, mentees, and tasks on component mount or when selectedMentorId changes
   useEffect(() => {
     setIsLoading(true);
-    const fetchMentors = fetch('/api/mentors').then(res => res.json());
-    const fetchUnassignedMentees = fetch('/api/unassigned-mentees')
-    .then(response => {
-      if (response.headers.get("Content-Type").includes("application/json")) {
-        return response.json();
-      } else {
-        throw new Error('Expected JSON response but got HTML');
-      }
-    })
-    .then(data => {
-      // Handle your JSON data here
-    })
-    .catch(error => {
-      console.error("Error fetching unassigned mentees:", error);
-    });
+    const fetchMentors = fetch('/api/mentors').then(res => res.json()).then(data => { console.log('Mentors:', data); return data; });
+    const fetchUnassignedMentees = fetch('/api/unassignedMentees')
+      .then(response => {
+        if (response.headers.get("Content-Type").includes("application/json")) {
+          return response.json();
+        } else {
+          throw new Error('Expected JSON response but got HTML');
+        }
+      })
+      .then(data => {
+        console.log('Unassigned mentees:', data); // Log the response
+        setUnassignedMentees(data);
+        return data;
+      })
+      .catch(error => {
+        console.error("Error fetching unassigned mentees:", error);
+      });
     const promises = [fetchMentors, fetchUnassignedMentees];
 
     if (selectedMentorId) {
@@ -44,40 +46,42 @@ const MentorsList = () => {
       const fetchTasks = fetch(`/api/tasks?mentorId=${selectedMentorId}`).then(res => res.json());
       promises.push(fetchMentees, fetchTasks);
     }
-
     Promise.all(promises)
-      .then(([mentorsData, unassignedMenteesData, menteesData, tasksData]) => {
-        setMentors(mentorsData);
-        setMentees(menteesData || []);
-        setTasks(tasksData || []);
-        setIsLoading(false);
-      })
-      .catch(error => {
-        console.error("Failed to fetch data:", error);
-        setError(error.toString());
-        setIsLoading(false);
-      });
+    .then((data) => {
+      setMentors(data[0]);
+      setUnassignedMentees(data[1]);
+      if (selectedMentorId) {
+        setMentees(data[2] || []);
+        setTasks(data[3] || []);
+      }
+      setIsLoading(false);
+    })
+    .catch(error => {
+      console.error("Failed to fetch data:", error);
+      setError(error.toString());
+      setIsLoading(false);
+    });
   }, [selectedMentorId]);
 
-  useEffect(() => {
-    setIsLoadingUnassignedMentees(true); // Assuming you have a state to track loading status
-    fetch('/api/unassigned-mentees')
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        return response.json();
-      })
-      .then(data => {
-        setUnassignedMentees(data); // Use setUnassignedMentees here to update state
-        setIsLoadingUnassignedMentees(false);
-      })
-      .catch(error => {
-        console.error("Failed to fetch unassigned mentees:", error);
-        setErrorUnassignedMentees(error.toString());
-        setIsLoadingUnassignedMentees(false);
-      });
-  }, []); // This effect runs once on component mount
+  // useEffect(() => {
+  //   setIsLoadingUnassignedMentees(true);
+  //   fetch('/api/unassignedMentees')
+  //     .then(response => {
+  //       if (!response.ok) {
+  //         throw new Error('Network response was not ok');
+  //       }
+  //       return response.json();
+  //     })
+  //     .then(data => {
+  //       setUnassignedMentees(data);
+  //       setIsLoadingUnassignedMentees(false);
+  //     })
+  //     .catch(error => {
+  //       console.error("Failed to fetch unassigned mentees:", error);
+  //       setErrorUnassignedMentees(error.toString());
+  //       setIsLoadingUnassignedMentees(false);
+  //     });
+  // }, []); // This effect runs once on component mount
   
 
   const handleMentorClick = (mentorId) => {
@@ -89,60 +93,87 @@ const MentorsList = () => {
   };
 
   // Inside your handleDragEnd function in the React component
- 
-  const handleDragEnd = (result) => {
-    const { destination, source } = result;
-  
+  const handleDragEnd = async (result) => {
+    const { destination, source, draggableId } = result;
+
     if (!destination) {
-      console.error("No destination found.");
       return;
     }
-  
-    // Assuming the draggableId and droppableId now represent names directly,
-    // or you have a way to map these IDs back to names.
-    let isMenteeBeingAssigned = false;
-  
-    // Check if the drag operation indicates a mentee assignment to a mentor
-    if (source.droppableId === "unassignedMenteesList" && destination.droppableId === "mentorsList") {
-      isMenteeBeingAssigned = true;
-  }
-  
-  if (isMenteeBeingAssigned) {
-    // The draggableId from the source should represent the mentee's name
-    // The droppableId from the destination should represent the mentor's section,
-    // but you'll need the mentor's name, which should be determined differently,
-    // possibly from the destination context or stored state.
-    const menteeName = source.draggableId;
-    // Example to obtain the mentor's name. Adjust according to how you can obtain this name in your application.
-    const mentorName = destination.droppableId; // This is a placeholder. You may need a different approach.
 
-      // Proceed to use menteeId and mentorId for backend update
-      fetch('/api/assign-mentee', {
+    if (destination.droppableId.startsWith('mentor-')) {
+      const mentorID = destination.droppableId.split('-')[1];
+      const menteeID = draggableId.split('-')[1];
+
+      console.log(`Drag ended. Assigning mentee ${menteeID} to mentor ${mentorID}`); // Log the IDs
+
+      const response = await fetch('/api/assignMentee', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ menteeName, mentorName }),
-      })
-      .then(response => response.json())
-      .then(data => console.log('Assignment successful', data))
-      .catch(error => console.error('Error:', error));
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ mentorID, menteeID }),
+      });
+
+      if (!response.ok) {
+        console.error('Failed to assign mentee to mentor:', await response.text());
+      } else {
+        // Fetch unassigned mentees again after successful assignment
+        fetch('/api/unassignedMentees')
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('Network response was not ok');
+            }
+            return response.json();
+          })
+          .then(data => {
+            setUnassignedMentees(data);
+          })
+          .catch(error => {
+            console.error("Failed to fetch unassigned mentees:", error);
+          });
+      }
     }
   };
-  
+  // Define a function to handle right-click on a mentee
+  // const handleContextMenu = (event, menteeID) => {
+  //   event.preventDefault();
+
+  // // Define a function to Delete the Mentor-Mentee Assignment
+  //   const deleteAssignment = async (menteeID) => {
+  //   const response = await fetch(`/api/deleteAssignment?menteeId=${menteeID}`, {
+  //     method: 'DELETE',
+  //   });
+
+  //   if (!response.ok) {
+  //     console.error('Failed to delete assignment:', await response.text());
+  //   } else {
+  //     // Refresh the mentees list after the assignment is deleted
+  //     fetchMentees();
+  //   }
+  // };
+
+  //   // Open your custom context menu here
+  //   // You'll need to store the menteeID in state so you can use it in the delete function
+  // };
   
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
 
   return (
     <DragDropContext onDragEnd={handleDragEnd}>
+      <div style={{ display: 'flex', justifyContent: 'space-between' }}></div>
+      <div>
       <h2>Mentors</h2>
-      <Droppable droppableId="mentors">
-        {(provided) => (
-          <div {...provided.droppableProps} ref={provided.innerRef}>
-            {mentors.map((mentor, index) => (
+          {mentors.map((mentor, index) => (
+        <Droppable key={mentor.EmployeeID} droppableId={`mentor-${mentor.EmployeeID}`}>
+          {(provided, snapshot) => (
+            <div
+              ref={provided.innerRef}
+              {...provided.droppableProps}
+              style={{
+                backgroundColor: snapshot.isDraggingOver ? 'lightblue' : 'white',
+                // Add other styles as needed
+              }}
+            >
               <Draggable
-                key={mentor.EmployeeID}
                 draggableId={mentor.EmployeeID.toString()}
                 index={index}
                 onDragStart={() => setDraggingId(mentor.EmployeeID)}
@@ -163,33 +194,12 @@ const MentorsList = () => {
                   </div>
                 )}
               </Draggable>
-            ))}
-            {provided.placeholder}
-          </div>
-        )}
-      </Droppable>
-
-      {/* Unassigned Mentees List - Draggable to be dropped on a mentor 
-      <Droppable droppableId="unassignedMentees">
-        {(provided) => (
-          <div ref={provided.innerRef} {...provided.droppableProps}>
-            <h2>Unassigned Mentees</h2>
-            <ul>
-              {unassignedMentees.map((mentee, index) => (
-                <Draggable key={mentee.EmployeeID} draggableId={`unassigned-${mentee.EmployeeID}`} index={index}>
-                  {(provided) => (
-                    <li ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
-                      {mentee.Name}
-                    </li>
-                  )}
-                </Draggable>
-              ))}
-            </ul>
-            {provided.placeholder}
-          </div>
-        )}
-      </Droppable>
-       */}             
+              {provided.placeholder}
+            </div>
+          )}
+        </Droppable>
+      ))}
+      </div>
       {/* Render Mentees list */}
       <div>
         <h2>Mentees</h2>
@@ -203,7 +213,6 @@ const MentorsList = () => {
           ))}
         </ul>
       </div>
-
       {/* Render Tasks list */}
       <div>
         <h2>Tasks</h2>
@@ -218,8 +227,37 @@ const MentorsList = () => {
           ))}
         </ul>
       </div>
+      
+      {/* Unassigned Mentees List - Draggable to be dropped on a mentor */} 
+      <div>
+        <ul>
+      <Droppable droppableId="unassignedMentees">
+        {(provided) => (
+          <div ref={provided.innerRef} {...provided.droppableProps}>
+            <h2>Unassigned Mentees</h2>
+            <ul>
+            {Array.isArray(unassignedMentees) && unassignedMentees.map((mentee, index) => (
+                <Draggable key={mentee.EmployeeID} draggableId={`unassigned-${mentee.EmployeeID}`} index={index}>
+                  {(provided) => (
+                    <li ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
+                      {mentee.Name}
+                    </li>
+                  )}
+                </Draggable>
+              ))}
+            </ul>
+            {provided.placeholder}
+          </div>
+        )}
+      </Droppable>  
+        </ul> 
+      </div>       
+
+
+      
     </DragDropContext>
   );
-};
+}
+
 
 export default MentorsList;

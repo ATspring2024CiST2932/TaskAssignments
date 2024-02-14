@@ -22,7 +22,7 @@ export default async function handler(req, res) {
     // Query to fetch mentee IDs for this mentor
     const menteeIdsQuery = `
       SELECT MenteeID
-      FROM temp_mentorassignments
+      FROM mentorassignments
       WHERE MentorID = ?;
     `;
     const [menteeIds] = await pool.query(menteeIdsQuery, [mentorId]);
